@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light dark">
+<title>La Roulette Aubade</title>
+<style>
+:root{--n:#1F3A5F;--t:#2A9D8F;--o:#E9A23B;--hb:#1F3A5F;--bg:#F3F6F9;--card:#fff;--tx:#16263d;--mut:#5a6b80;--line:#dbe3ec;--hd:#1F3A5F;--sel:#fff6e6;--chip:#eef3f8;--okc:#1d7268;--erc:#b3261e;--btn:#1F3A5F;--sh:0 1px 2px #1f3a5f14,0 6px 18px #1f3a5f10;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--hb:#0b1626;--bg:#0e1a2b;--card:#16263d;--tx:#e8eef5;--mut:#9fb0c4;--line:#2b3d56;--hd:#9fd6cf;--sel:#2b3140;--chip:#1d3150;--okc:#63d2c3;--erc:#ff8a80;--btn:#2f5a91;--sh:none}}
+:root[data-theme="dark"]{--hb:#0b1626;--bg:#0e1a2b;--card:#16263d;--tx:#e8eef5;--mut:#9fb0c4;--line:#2b3d56;--hd:#9fd6cf;--sel:#2b3140;--chip:#1d3150;--okc:#63d2c3;--erc:#ff8a80;--btn:#2f5a91;--sh:none}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;font:19px/1.45 -apple-system,"Segoe UI",system-ui,Roboto,Arial,sans-serif;background:var(--bg);color:var(--tx);-webkit-text-size-adjust:100%}
+header{background:var(--hb);color:#fff;display:flex;gap:8px;align-items:center;padding:12px 24px;flex-wrap:wrap;border-bottom:4px solid var(--o)}
+header h1{font-size:25px;margin:0 auto 0 0;display:flex;align-items:center;gap:10px;letter-spacing:.2px}
+header h1 small{font-weight:400;font-size:16px;opacity:.8}
+button,input,select{font:inherit;border-radius:10px;border:1.5px solid var(--line);padding:10px 14px;background:var(--card);color:var(--tx)}
+button{background:var(--btn);color:#fff;border-color:var(--btn);cursor:pointer;min-height:48px;font-weight:600;transition:transform .12s,filter .15s}
+button:hover:not(:disabled){filter:brightness(1.12)}button:active{transform:scale(.97)}
+button:disabled{background:var(--line);border-color:var(--line);color:var(--mut);cursor:not-allowed}
+button.nav{background:transparent;border-color:#ffffff55;color:#fff;min-height:44px;padding:8px 16px;border-radius:99px}
+button.nav.on{background:#fff;color:#1F3A5F;border-color:#fff}
+button.go{background:var(--o);border-color:var(--o);color:#10213a;font-size:26px;min-height:68px;padding:10px 40px;border-radius:16px;box-shadow:0 6px 18px #e9a23b55}
+button.sec{background:var(--card);color:var(--hd);border-color:var(--line)}
+header button.sec{color:#1F3A5F;background:#fff}
+:focus-visible{outline:4px solid var(--o);outline-offset:2px}
+main{max-width:1400px;margin:auto;padding:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
+.card{background:var(--card);border-radius:16px;padding:20px 24px;border:1px solid var(--line);box-shadow:var(--sh);overflow-x:auto}
+.card h2{margin:0 0 12px;font-size:21px;color:var(--hd);padding-bottom:8px;border-bottom:2px solid var(--line)}
+.card h3{margin:16px 0 6px;font-size:18px;color:var(--hd)}
+label{color:var(--mut);font-size:16px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:0 14px}.kv>*{padding:7px 0;border-bottom:1px solid var(--line)}.kv b{text-align:right}
+.badge{display:inline-block;padding:2px 12px;border-radius:99px;background:#1d7268;color:#fff;font-size:16px;font-weight:600}
+.badge.w{background:var(--o);color:#10213a}.badge.g{background:#6b7a8f}
+.gauge{position:relative;height:28px;background:var(--line);border-radius:14px;margin:26px 0 34px}
+.gauge i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--t),var(--o));border-radius:14px;transition:width .8s}
+.gauge u{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--tx);text-decoration:none}
+.gauge u span{position:absolute;top:36px;left:-30px;width:64px;text-align:center;font-size:14px;color:var(--mut)}
+.tl{display:flex;gap:10px}.tl div{flex:1;border:2px solid var(--line);border-radius:12px;padding:10px;text-align:center}.tl .now{border-color:var(--o)}
+ul.cl{list-style:none;padding:0;margin:8px 0;max-height:300px;overflow:auto}
+ul.cl li button{width:100%;text-align:left;margin:3px 0;background:var(--card);color:var(--tx);border-color:var(--line)}
+ul.cl li button.sel{border-color:var(--o);background:var(--sel)}
+table{width:100%;border-collapse:collapse;font-size:16px}td,th{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mut);font-weight:600}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px}
+.wheelbox{position:relative;width:min(100%,520px)}.wheelbox canvas{width:100%;height:auto;display:block}
+.ptr{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border:20px solid transparent;border-top:40px solid var(--o);filter:drop-shadow(0 2px 2px #0006)}
+.msg{min-height:30px;font-weight:600}.err{color:var(--erc)}.ok{color:var(--okc)}
+.modal{position:fixed;inset:0;background:#0b1a2ecc;display:none;align-items:center;justify-content:center;z-index:20;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.modal.on{display:flex}.modal .card{max-width:620px;text-align:center;padding:30px;animation:pop .4s}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.code{font:700 28px ui-monospace,Menlo,Consolas,monospace;background:var(--chip);padding:8px 14px;border-radius:10px;display:inline-block;margin:8px}
+#conf{position:fixed;inset:0;pointer-events:none;z-index:30}
+svg text{fill:currentColor}
+footer{text-align:center;color:var(--mut);font-size:14px;padding:6px 16px 22px}
+.kiosk header .nav,.kiosk .noc,.kiosk footer{display:none}.kiosk{font-size:23px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.log{max-height:240px;overflow:auto;font-size:15px}
+@media(max-width:700px){body{font-size:17px}main{padding:12px}header{padding:10px 14px}header h1{flex-basis:100%;font-size:22px}button.nav{padding:8px 12px;font-size:16px}.grid{gap:12px}.card{padding:14px 16px}button.go{width:100%;font-size:22px}.tl{gap:6px}.tl div{padding:6px 3px;font-size:14px}.gauge u span{font-size:11px;width:50px;left:-25px}.code{font-size:24px}input[type=number]{width:100%!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<header><h1><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#2A9D8F"/><path d="M20 20V2A18 18 0 0 1 36.6 13z" fill="#E9A23B"/><path d="M20 20L3.4 27A18 18 0 0 1 20 2z" fill="#fff" opacity=".25"/><circle cx="20" cy="20" r="5" fill="#fff"/></svg>La Roulette Aubade <small>Magasin de St Genis</small></h1>
+<button class="nav on" data-v="client">Accueil client</button>
+<button class="nav" data-v="comptoir">Mode comptoir</button>
+<button class="nav" data-v="sim">Simulation de campagne</button>
+<button class="nav" id="kb">Affichage client</button><button id="kx" class="sec" hidden>Quitter l’affichage client</button></header>
+<main id="app"></main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="card" id="mc"></div></div>
+<canvas id="conf"></canvas>
+<footer>Démonstration · données fictives · Aubade St Genis</footer>
+<script>
+"use strict";
+/* ============ 1. DONNÉES ============ */
+const LOTS0=[
+ {id:"r5",s:"Remise 5 %",label:"Remise 5 % sur la prochaine commande",cat:"courant",p:30,cost:40,cond:"Valable sur une prochaine commande, hors promotions en cours."},
+ {id:"acc",s:"Accessoire",label:"Accessoire de la gamme",cat:"courant",p:20,cost:25,cond:"À retirer en magasin, un accessoire au choix dans la sélection."},
+ {id:"gdy",s:"Goodies",label:"Goodies Aubade",cat:"courant",p:20,cost:5,cond:"À retirer au comptoir dans la limite des stocks."},
+ {id:"r10",s:"Remise 10 %",label:"Remise 10 % sur une commande",cat:"inter",p:12,cost:80,cond:"Valable sur une commande unique, non cumulable."},
+ {id:"liv",s:"Livraison offerte",label:"Livraison offerte sur un chantier",cat:"inter",p:10,cost:60,cond:"Un chantier, sur le périmètre de livraison habituel."},
+ {id:"vet",s:"Vêtement",label:"Vêtement de travail Aubade",cat:"inter",p:6,cost:70,cond:"À retirer en magasin, taille au choix selon stock."},
+ {id:"gros",s:"GROS LOT",label:"Un produit de la gamme offert",cat:"gros",p:2,cost:400,cond:"Un produit de la gamme, valeur plafonnée selon le règlement de l’opération."}];
+const CATS={courant:"Lots courants",inter:"Lots intermédiaires",gros:"Gros lot"};
+/* Cadeaux adaptés au métier du client : même catégorie et même probabilité, seul le contenu change */
+const METIERS={
+ plombier:{n:"Plombier",acc:["Pince multiprise","Pince multiprise de la gamme"],gdy:["Joints et raccords","Assortiment de joints et raccords"],vet:["Pantalon plombier","Pantalon de plombier Aubade"],gros:["Mitigeur","Un mitigeur thermostatique de la gamme offert"]},
+ chauffagiste:{n:"Chauffagiste",acc:["Kit de purge","Clé à purger et kit de purge"],gdy:["Joints et PTFE","Lot de joints fibre et ruban PTFE"],vet:["Veste chauffagiste","Veste de travail Aubade"],gros:["Têtes thermostatiques","Un lot de têtes thermostatiques offert"]},
+ carreleur:{n:"Carreleur",acc:["Kit pose","Kit croisillons et spatule"],gdy:["Éponge et mètre","Éponge de finition et mètre Aubade"],vet:["Genouillères","Pantalon renforcé et genouillères Aubade"],gros:["Coupe-carreaux","Un coupe-carreaux de la gamme offert"]},
+ installateur:{n:"Installateur salle de bains",acc:["Kit silicone","Pistolet à silicone et kit joints sanitaires"],gdy:["Silicone sanitaire","Cartouches de silicone sanitaire"],vet:["Polo installateur","Polo et pantalon Aubade"],gros:["Colonne de douche","Une colonne de douche de la gamme offerte"]},
+ renovateur:{n:"Rénovation tout corps d’état",acc:["Niveau et mètre","Niveau et mètre de la gamme"],gdy:["Crayons de chantier","Crayons de chantier et mètre Aubade"],vet:["Veste de chantier","Veste de chantier Aubade"],gros:["Meuble vasque","Un meuble vasque de la gamme offert"]}};
+const forMetier=(l,m)=>{const x=METIERS[m]&&METIERS[m][l.id];return x?{...l,s:x[0],label:x[1]}:l};
+const validTo=d=>{const v=new Date(d);v.setDate(v.getDate()+60);return v};   // validité : 60 jours
+const COLORS=["#1F3A5F","#2A9D8F","#E9A23B","#4f7cb0","#1d7268","#c7821a","#7a1f3d"];
+const mkInv=a=>a.map(([m,amt,paid])=>({m,amt,paid}));
+function seed(){
+ S={X:1000,exp:1,lots:JSON.parse(JSON.stringify(LOTS0))};
+ const d=new Date().toISOString();
+ ST={cur:3,sel:null,unlocked:false,audit:[],clients:[
+  {id:1,code:"C1001",metier:"plombier",name:"Plomberie Durand SARL",type:"compte",inv:mkInv([[1,1200,1200],[2,1500,1500],[3,2300,2300]]),settled:{1:1,2:1,3:1},spins:[{m:1,bonus:false,lot:"Assortiment de joints et raccords",code:"AUB-2026-K3D8",date:d},{m:2,bonus:false,lot:"Remise 5 % sur la prochaine commande",code:"AUB-2026-M7Q2",date:d}]},
+  {id:2,code:"C1002",metier:"installateur",name:"Salle de Bains Martin",type:"direct",inv:mkInv([[1,1100,1100],[2,1050,1050],[3,3400,3400]]),settled:{},spins:[{m:1,bonus:false,lot:"Pistolet à silicone et kit joints sanitaires",code:"AUB-2026-P4X1",date:d},{m:2,bonus:false,lot:"Cartouches de silicone sanitaire",code:"AUB-2026-T9B6",date:d}]},
+  {id:3,code:"C1003",metier:"carreleur",name:"Carrelages Lopez",type:"compte",inv:mkInv([[3,2100,0]]),settled:{},spins:[]},
+  {id:4,code:"C1004",metier:"installateur",name:"Installations Roche",type:"direct",inv:mkInv([[3,650,650]]),settled:{},spins:[]},
+  {id:5,code:"C1005",metier:"renovateur",name:"Artisan Bonnet",type:"direct",inv:mkInv([[3,1300,1300]]),settled:{},spins:[{m:3,bonus:false,lot:"Crayons de chantier et mètre Aubade",code:"AUB-2026-A1B2",date:d}]},
+  {id:6,code:"C1006",metier:"chauffagiste",name:"Chauffage Perrin",type:"compte",inv:mkInv([[3,1250,1250]]),settled:{3:1},spins:[]},
+  {id:7,code:"C1007",metier:"installateur",name:"SDB Concept Ferney",type:"direct",inv:mkInv([[3,2000,2000],[3,1100,0]]),settled:{},spins:[]},
+  {id:8,code:"C1008",metier:"renovateur",name:"Rénov Gex Bâtiment",type:"compte",inv:mkInv([[1,800,800],[3,2750,2750]]),settled:{1:1,3:1},spins:[]}]};
+ log("Données de démonstration chargées");
+}
+let S,ST;
+/* ============ 2. LOGIQUE MÉTIER (fonctions pures) ============ */
+const tier=(ca,X)=>ca>=3*X?3:ca>=2*X?2:ca>=X?1:0;           // palier (montant exactement égal au seuil = atteint)
+const sumP=l=>l.reduce((s,x)=>s+x.p,0);
+const probsValid=l=>l.every(x=>x.p>=0&&isFinite(x.p))&&Math.abs(sumP(l)-100)<1e-6;
+const poolFor=(t,lots)=>lots.filter(l=>l.cat==="courant"||(l.cat==="inter"&&t>=2)||(l.cat==="gros"&&t>=3));
+function draw(pool,rnd=Math.random()){                       // tirage pondéré (renormalisé)
+ const tot=sumP(pool);if(!(tot>0))throw new Error("Probabilités invalides");
+ let r=rnd*tot;for(const l of pool){if(r<l.p)return l;r-=l.p}return pool[pool.length-1]}
+const billed=(c,m)=>c.inv.filter(i=>i.m===m).reduce((s,i)=>s+i.amt,0);
+const paid=(c,m)=>c.inv.filter(i=>i.m===m).reduce((s,i)=>s+i.paid,0);
+// Tours débloqués pour un mois : compte = seulement si règlement du mois enregistré ; sinon selon le réglé
+const earned=(c,m,X)=>(c.type==="compte"&&!c.settled[m])?0:tier(paid(c,m),X);
+const bonusOk=(c,X)=>[1,2,3].every(m=>tier(billed(c,m),X)>=1);
+// Droits de jeu disponibles au mois "cur" (expiration : mois m utilisable jusqu'à m+exp)
+function rights(c,cur,cfg){
+ const out=[];
+ for(let m=1;m<=cur;m++){
+  if(cur>m+cfg.exp)continue;
+  const n=earned(c,m,cfg.X)-c.spins.filter(s=>s.m===m&&!s.bonus).length;
+  if(n>0)out.push({m,n,tier:earned(c,m,cfg.X),bonus:false});}
+ if(cur===3&&bonusOk(c,cfg.X)&&earned(c,3,cfg.X)>=1&&!c.spins.some(s=>s.bonus))
+  out.push({m:3,n:1,bonus:true,tier:tier(billed(c,3),cfg.X)===3?3:2});
+ return out}
+function whyNot(c,cur,cfg){
+ const b=billed(c,cur);
+ if(!c.inv.length||b===0)return "Aucune facture ce mois-ci : pas de tour disponible.";
+ if(c.type==="compte"&&!c.settled[cur])return "Le règlement de fin de mois n’est pas encore enregistré : les tours restent bloqués.";
+ if(tier(b,cfg.X)===0)return "Il manque "+eur(cfg.X-b)+" pour obtenir le palier 1.";
+ if(tier(paid(c,cur),cfg.X)<tier(b,cfg.X))return "Règlement partiel : il reste "+eur(b-paid(c,cur))+" à régler pour débloquer tous les tours.";
+ return "Tous les tours de ce mois ont été joués.";}
+const genCode=()=>"AUB-2026-"+Array.from({length:4},()=>"ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random()*32)]).join("");
+/* simulation d'un client sur 3 mois (tous règlements effectués) */
+function simulate(cfg,N,rnd=Math.random){
+ const R={ca:0,tiers:[0,0,0,0],tours:0,cats:{courant:0,inter:0,gros:0},cost:0};
+ for(let k=0;k<N;k++){
+  const c={type:rnd()<.5?"compte":"direct",inv:[],settled:{1:1,2:1,3:1},spins:[]};
+  for(let m=1;m<=3;m++){const a=rnd()<.1?0:Math.round(cfg.X*rnd()*3.6/10)*10;c.inv.push({m,amt:a,paid:a});R.ca+=a;R.tiers[tier(a,cfg.X)]++;
+   const n=earned(c,m,cfg.X);for(let i=0;i<n;i++)win(tier(a,cfg.X));}
+  if(bonusOk(c,cfg.X)&&earned(c,3,cfg.X)>=1)win(tier(billed(c,3),cfg.X)===3?3:2);}
+ function win(t){const l=draw(poolFor(t,cfg.lots),rnd());R.tours++;R.cats[l.cat]++;R.cost+=l.cost}
+ return R}
+/* ============ 3. INTERFACE ============ */
+const $=s=>document.querySelector(s);
+const eur=n=>new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(n);
+const fd=d=>new Date(d).toLocaleDateString("fr-FR");
+const pct=n=>n.toLocaleString("fr-FR",{maximumFractionDigits:1})+" %";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function log(t){ST.audit.unshift({d:new Date().toISOString(),t});}
+let view="client",spinning=false,q="";
+const cl=()=>ST.clients.find(c=>c.id===ST.sel);
+function show(v){view=v;document.querySelectorAll(".nav[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===v));render();}
+function render(){$("#app").innerHTML=({client:vClient,comptoir:vCounter,sim:vSim})[view]();bind();if(view==="client")drawWheelFor();}
+function vClient(){
+ const c=cl(),list=ST.clients.filter(x=>(x.name+" "+x.code).toLowerCase().includes(q.toLowerCase()));
+ let h=`<div class="grid"><section class="card noc-hide"><h2>Rechercher un client</h2>
+ <label for="q">Nom ou code client</label><input id="q" value="${esc(q)}" placeholder="Ex. Durand ou C1001" style="width:100%">
+ <div class="row"><button id="qr" class="sec">Scanner un QR code (simulé)</button></div>
+ <ul class="cl">${list.map(x=>`<li><button data-sel="${x.id}" class="${x.id===ST.sel?"sel":""}">${esc(x.name)}<br><small>${x.code} · ${x.type==="compte"?"Client en compte":"Facture directe"}</small></button></li>`).join("")||"<li>Aucun client trouvé. Vérifiez l’orthographe ou le code.</li>"}</ul></section>`;
+ if(!c)return h+`<section class="card"><h2>Bienvenue</h2><p>Recherchez un client ou scannez son QR code pour afficher sa progression et lui faire tourner la roulette.</p></section></div>`;
+ const cur=ST.cur,b=billed(c,cur),p=paid(c,cur),t=tier(b,S.X),R=rights(c,cur,S),nbR=R.reduce((s,r)=>s+r.n,0),played=c.spins.length;
+ const bon=bonusOk(c,S.X)||cur<3&&[1,2,3].slice(0,cur).every(m=>tier(billed(c,m),S.X)>=1);
+ h+=`<section class="card"><h2>${esc(c.name)}</h2><div class="kv">
+ <span>Type</span><b>${c.type==="compte"?"Client en compte":"Facture directe"}</b>
+ <span>Métier</span><b>${METIERS[c.metier].n}</b><span>Mois en cours</span><b>Mois ${cur} sur 3</b>
+ <span>Chiffre d’affaires facturé (HT)</span><b>${eur(b)}</b>
+ <span>Chiffre d’affaires réglé</span><b>${eur(p)}</b>
+ <span>Palier actuel</span><b>${t?"Palier "+t:"Aucun"}</b>
+ <span>Tours disponibles</span><b><span class="badge ${nbR?"":"g"}">${nbR}</span></b>
+ <span>Tours déjà joués</span><b>${played}</b>
+ <span>Bonus trimestre</span><b>${cur<3?(bon?"En bonne voie (Mois 3)":"Perdu"):(c.spins.some(s=>s.bonus)?"Joué":bonusOk(c,S.X)&&earned(c,3,S.X)>=1?"Disponible":bonusOk(c,S.X)?"Après règlement":"Non acquis")}</b></div></section>`;
+ const next=t<3?(t+1)*S.X:null,gp=Math.min(100,b/(3*S.X)*100);
+ h+=`<section class="card"><h2>Progression</h2>
+ <p>${next?`Plus que <b>${eur(next-b)}</b> pour gagner ${t===2?"l’accès au gros lot et 1 tour supplémentaire":"1 tour supplémentaire"}.`:"Palier maximum atteint : accès au gros lot !"}</p>
+ <div class="gauge" role="progressbar" aria-valuenow="${Math.round(gp)}" aria-valuemin="0" aria-valuemax="100"><i style="width:${gp}%"></i>${[1,2,3].map(i=>`<u style="left:${i/3*100-(i===3?.4:0)}%"><span>${eur(i*S.X)}</span></u>`).join("")}</div>
+ <div class="tl">${[1,2,3].map(m=>{let st="À venir";const rr=R.find(r=>r.m===m&&!r.bonus);
+  if(m<=cur){if(c.type==="compte"&&!c.settled[m]&&billed(c,m)>0)st="Règlement en attente";else if(rr)st="Tour disponible";else if(c.spins.some(s=>s.m===m&&!s.bonus))st="Tour joué";else st=m===cur?"En cours":"Réglé";}
+  return `<div class="${m===cur?"now":""}"><b>Mois ${m}</b><br>${eur(billed(c,m))}<br><span class="badge ${st==="Tour disponible"?"w":st==="À venir"||st==="Règlement en attente"?"g":""}">${st}</span></div>`}).join("")}</div></section>`;
+ const gl=(t,title)=>{if(t<1)return "";const pl=poolFor(t,S.lots).map(l=>forMetier(l,c.metier)),tot=sumP(pl);return `<h3>${title}</h3><table><tr><th>Lot</th><th>Chance</th></tr>${pl.map(l=>`<tr><td>${esc(l.label)}</td><td><b>${tot?pct(l.p/tot*100):"-"}</b></td></tr>`).join("")}</table>`};
+ h+=`<section class="card"><h2>Gains possibles</h2>${t?gl(t,"Votre palier actuel (palier "+t+")"):"<p>Atteignez le palier 1 pour jouer.</p>"}${t<3?gl(t+1,"Au palier suivant (palier "+(t+1)+")"):""}</section>`;
+ const can=nbR>0&&probsValid(S.lots);
+ h+=`<section class="card stage" style="grid-column:1/-1"><h2>La roulette</h2>
+ <div class="wheelbox"><div class="ptr"></div><canvas id="wh" width="800" height="800" aria-label="Roue des lots"></canvas></div>
+ <button class="go" id="spin" ${can?"":"disabled"}>Tourner</button>
+ <div class="msg ${can?"ok":"err"}" aria-live="polite" id="msg">${!probsValid(S.lots)?"Configuration invalide : la somme des probabilités doit faire 100 %.":can?(R[0].bonus?"Tour bonus de fin de trimestre disponible !":nbR+" tour"+(nbR>1?"s":"")+" disponible"+(nbR>1?"s":"")):esc(whyNot(c,cur,S))}</div></section>
+ <section class="card" style="grid-column:1/-1"><h2>Historique des gains</h2>${c.spins.length?`<table><tr><th>Date</th><th>Lot</th><th>Code</th><th>Origine</th><th>Statut</th></tr>${c.spins.map(s=>`<tr><td>${fd(s.date)}</td><td>${esc(s.lot)}</td><td>${s.code}</td><td>${s.bonus?"Bonus trimestre":"Mois "+s.m}</td><td>${s.used?"Remis":"À retirer"}</td></tr>`).join("")}</table>`:"<p>Aucun gain pour le moment.</p>"}</section></div>`;
+ return h}
+/* ---------- Roue ---------- */
+let rot=0,wpool=[];
+function drawWheelFor(){const c=cl();if(!c)return;const R=rights(c,ST.cur,S);const t=R.length?R[0].tier:Math.max(1,tier(billed(c,ST.cur),S.X));
+ wpool=poolFor(t,S.lots).map(l=>forMetier(l,c.metier));drawWheel()}
+function drawWheel(){const cv=$("#wh");if(!cv)return;const g=cv.getContext("2d"),n=wpool.length,a=2*Math.PI/n,r=390;
+ g.clearRect(0,0,800,800);g.save();g.translate(400,400);g.rotate(rot);
+ wpool.forEach((l,i)=>{g.beginPath();g.moveTo(0,0);g.arc(0,0,r,i*a,(i+1)*a);g.fillStyle=COLORS[S.lots.findIndex(x=>x.id===l.id)%COLORS.length];g.fill();g.strokeStyle="#fff";g.lineWidth=4;g.stroke();
+  g.save();g.rotate((i+.5)*a);g.fillStyle="#fff";g.font="bold 34px Segoe UI,Arial";g.textAlign="right";g.fillText(l.s,r-26,12);g.restore()});
+ g.restore();g.beginPath();g.arc(400,400,48,0,7);g.fillStyle="#fff";g.fill();g.lineWidth=6;g.strokeStyle="#1F3A5F";g.stroke()}
+function spin(){
+ const c=cl(),R=rights(c,ST.cur,S);if(spinning||!R.length||!probsValid(S.lots))return;
+ const ri=R[0];wpool=poolFor(ri.tier,S.lots).map(l=>forMetier(l,c.metier));const lot=draw(wpool);   // résultat décidé AVANT l'animation
+ const i=wpool.indexOf(lot),a=2*Math.PI/wpool.length,jit=(Math.random()-.5)*a*.7;
+ const target=-Math.PI/2-(i+.5)*a+jit,t0=rot;
+ const delta=(((target-t0)%(2*Math.PI))+2*Math.PI)%(2*Math.PI)+2*Math.PI*6,dur=4000+Math.random()*1500,st=performance.now();
+ spinning=true;$("#spin").disabled=true;$("#msg").textContent="La roue tourne…";
+ (function f(now){const k=Math.min(1,(now-st)/dur);rot=t0+delta*(1-Math.pow(1-k,3));drawWheel();
+  if(k<1)return requestAnimationFrame(f);
+  spinning=false;const code=genCode();
+  c.spins.push({m:ri.m,bonus:ri.bonus,id:lot.id,lot:lot.label,code,used:false,date:new Date().toISOString()});
+  log(`Tour joué : ${c.name} — ${lot.label} (${code})`);
+  result(lot,code);confetti(lot.cat==="gros"?260:110);})(st)}
+function result(lot,code){const v=validTo(new Date());
+ $("#mc").innerHTML=`<h2 id="mt" style="font-size:32px;color:var(--hd);border:0">${lot.cat==="gros"?"🏆 Gros lot !":"Félicitations !"}</h2><p style="font-size:28px"><b>${esc(lot.label)}</b></p><p>${esc(lot.cond)}</p><p>Valable jusqu’au <b>${fd(v)}</b></p><div class="code">${code}</div><p><small>Présentez ce code au comptoir : le vendeur le saisit, retrouve votre lot dans le registre, puis le marque comme remis.</small></p><button id="mclose">Fermer</button>`;
+ $("#modal").classList.add("on");$("#mclose").focus();$("#mclose").onclick=()=>{$("#modal").classList.remove("on");render()}}
+/* ---------- Confettis ---------- */
+function confetti(n){const cv=$("#conf"),g=cv.getContext("2d");cv.width=innerWidth;cv.height=innerHeight;
+ const P=Array.from({length:n},()=>({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*18,vy:-Math.random()*16-4,c:COLORS[Math.floor(Math.random()*7)],s:6+Math.random()*8,r:Math.random()*6}));
+ (function f(){g.clearRect(0,0,cv.width,cv.height);let alive=0;P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.2;if(p.y<cv.height){alive++;g.save();g.translate(p.x,p.y);g.rotate(p.r);g.fillStyle=p.c;g.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);g.restore()}});
+  if(alive)requestAnimationFrame(f);else g.clearRect(0,0,cv.width,cv.height)})()}
+/* ---------- Mode comptoir ---------- */
+function vCounter(){
+ if(!ST.unlocked)return `<section class="card" style="max-width:480px;margin:auto"><h2>Mode comptoir</h2><label for="pin">Code PIN vendeur</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" style="width:100%"><div class="row"><button id="pinok">Déverrouiller</button></div><div class="msg err" id="pmsg" aria-live="polite"></div><small>Code de démonstration : 1234</small></section>`;
+ const c=cl(),cur=ST.cur;
+ let h=`<div class="grid"><section class="card"><h2>Client et mois</h2><label for="cs">Client</label><select id="cs" style="width:100%">${ST.clients.map(x=>`<option value="${x.id}" ${x.id===ST.sel?"selected":""}>${esc(x.name)}</option>`).join("")}</select>
+ <p>Mois en cours : <b>Mois ${cur} sur 3</b></p><div class="row"><button id="nm" ${cur>=3?"disabled":""}>Passer au mois suivant</button><button id="rs" class="sec">Réinitialiser la démo</button></div><div class="msg" id="cmsg" aria-live="polite"></div></section>`;
+ if(c){h+=`<section class="card"><h2>Factures — ${esc(c.name)}</h2>
+ <div class="row"><label for="fa">Montant (€)</label><input id="fa" type="number" min="0" step="0.01" style="width:140px"><label for="fd">Date</label><input id="fd" type="date" value="${new Date().toISOString().slice(0,10)}"><button id="af">Ajouter la facture</button></div>
+ <table><tr><th>Mois</th><th>Montant</th><th>Réglé</th><th></th></tr>${c.inv.map((i,k)=>`<tr><td>${i.m}</td><td>${eur(i.amt)}</td><td>${eur(i.paid)}</td><td>${c.type==="direct"&&i.paid<i.amt?`<input type="number" id="pa${k}" value="${(i.amt-i.paid).toFixed(2)}" step="0.01" style="width:110px" aria-label="Montant réglé"><button data-pay="${k}">Régler</button>`:""}</td></tr>`).join("")||"<tr><td colspan=4>Aucune facture.</td></tr>"}</table>
+ ${c.type==="compte"?`<div class="row"><button id="sm" ${c.settled[cur]?"disabled":""}>${c.settled[cur]?"Mois réglé":"Enregistrer le règlement de fin de mois"}</button></div>`:""}</section>`;}
+ h+=`<section class="card"><h2>Configuration</h2><div class="row"><label for="cx">Valeur de X (€)</label><input id="cx" type="number" min="1" value="${S.X}" style="width:120px"><label for="ce">Expiration (mois suivants)</label><input id="ce" type="number" min="0" max="2" value="${S.exp}" style="width:80px"></div>
+ <table><tr><th>Lot</th><th>Chance %</th><th>Coût €</th></tr>${S.lots.map((l,i)=>`<tr><td>${esc(l.label)}</td><td><input class="lp" data-i="${i}" type="number" step="0.1" min="0" value="${l.p}" style="width:90px" aria-label="Probabilité ${esc(l.s)}"></td><td><input class="lc" data-i="${i}" type="number" min="0" value="${l.cost}" style="width:90px" aria-label="Coût ${esc(l.s)}"></td></tr>`).join("")}</table>
+ <p>Total : <b id="tot"></b></p><button id="sc">Enregistrer la configuration</button><div class="msg" id="kmsg" aria-live="polite"></div></section>
+ <section class="card" style="grid-column:1/-1"><h2>Remise d’un lot au comptoir</h2>
+ <p>Chaque tirage crée une ligne dans le <b>registre des lots</b> : le code unique renvoie au client, au lot, à la date limite et au statut. Le vendeur saisit le code présenté par le client : le lot s’affiche, puis il le marque comme remis (un code ne sert qu’une fois).</p>
+ <div class="row"><label for="lc">Code du lot</label><input id="lc" placeholder="AUB-2026-XXXX" style="width:240px" autocapitalize="characters"><button id="lv">Vérifier le code</button></div>
+ <div class="msg" id="lmsg" aria-live="polite"></div><div id="lres"></div>
+ <h3>Registre des lots</h3><table><tr><th>Code</th><th>Client</th><th>Lot</th><th>Valable jusqu’au</th><th>Statut</th></tr>${ST.clients.flatMap(c=>c.spins.map(s=>`<tr><td><b>${s.code}</b></td><td>${esc(c.name)}</td><td>${esc(s.lot)}</td><td>${fd(validTo(s.date))}</td><td>${s.used?"Remis":"À retirer"}</td></tr>`)).join("")||"<tr><td colspan=5>Aucun lot gagné pour le moment.</td></tr>"}</table></section>
+ <section class="card" style="grid-column:1/-1"><h2>Journal d’audit</h2><div class="log">${ST.audit.map(a=>`<div>${new Date(a.d).toLocaleString("fr-FR")} — ${esc(a.t)}</div>`).join("")}</div></section></div>`;
+ return h}
+function bindCounter(){
+ const m=(id,t,ok)=>{const e=$(id);if(e){e.textContent=t;e.className="msg "+(ok?"ok":"err")}};
+ if($("#pinok")){const go=()=>{if($("#pin").value==="1234"){ST.unlocked=true;log("Mode comptoir déverrouillé");render()}else m("#pmsg","Code PIN incorrect.")};$("#pinok").onclick=go;$("#pin").onkeydown=e=>e.key==="Enter"&&go();return}
+ const c=cl();
+ $("#cs").onchange=e=>{ST.sel=+e.target.value;render()};
+ $("#nm").onclick=()=>{ST.cur++;log("Passage au mois "+ST.cur);render()};
+ $("#rs").onclick=()=>{const b=$("#rs");if(b.dataset.c){const u=ST.unlocked;seed();ST.unlocked=u;render()}else{b.dataset.c=1;b.textContent="Confirmer la réinitialisation"}};
+ if($("#af"))$("#af").onclick=()=>{const a=parseFloat($("#fa").value);if(!(a>0))return m("#cmsg","Saisissez un montant supérieur à 0.");
+  c.inv.push({m:ST.cur,amt:a,paid:0});log(`Facture ${eur(a)} ajoutée à ${c.name} (${$("#fd").value||"sans date"})`);render()};
+ document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{const k=+b.dataset.pay,i=c.inv[k],a=parseFloat($("#pa"+k).value);
+  if(!(a>0))return m("#cmsg","Montant de règlement invalide.");i.paid=Math.min(i.amt,i.paid+a);log(`Règlement ${eur(Math.min(a,i.amt))} — ${c.name}`+(i.paid<i.amt?" (partiel)":""));render()});
+ if($("#sm"))$("#sm").onclick=()=>{c.inv.filter(i=>i.m===ST.cur).forEach(i=>i.paid=i.amt);c.settled[ST.cur]=1;log(`Règlement de fin de mois ${ST.cur} — ${c.name}`);render()};
+ $("#lv").onclick=()=>{const k=$("#lc").value.trim().toUpperCase(),msg=$("#lmsg"),res=$("#lres");res.innerHTML="";
+  const f=ST.clients.flatMap(x=>x.spins.map(sp=>({x,sp}))).find(z=>z.sp.code===k);
+  if(!f){msg.textContent="Code inconnu : vérifiez la saisie.";msg.className="msg err";return}
+  const {x,sp}=f,v=validTo(sp.date),old=v<new Date();
+  msg.textContent=sp.used?"Ce lot a déjà été remis.":old?"Ce code est expiré.":"Code valide : lot à remettre.";msg.className="msg "+(sp.used||old?"err":"ok");
+  res.innerHTML=`<div class="kv"><span>Client</span><b>${esc(x.name)}</b><span>Lot</span><b>${esc(sp.lot)}</b><span>Valable jusqu’au</span><b>${fd(v)}</b></div>`+(sp.used||old?"":`<div class="row"><button id="lr">Marquer comme remis</button></div>`);
+  if($("#lr"))$("#lr").onclick=()=>{sp.used=true;log(`Lot remis : ${sp.lot} (${sp.code}) — ${x.name}`);render()}};
+ const upd=()=>{const l=S.lots.map((x,i)=>({p:parseFloat(document.querySelector(`.lp[data-i="${i}"]`).value)||0}));const t=sumP(l);$("#tot").textContent=pct(t);$("#tot").style.color=Math.abs(t-100)<1e-6?"var(--okc)":"var(--erc)"};
+ document.querySelectorAll(".lp").forEach(e=>e.oninput=upd);upd();
+ $("#sc").onclick=()=>{const X=parseFloat($("#cx").value),ex=parseInt($("#ce").value,10);
+  const lots=S.lots.map((l,i)=>({...l,p:parseFloat(document.querySelector(`.lp[data-i="${i}"]`).value),cost:parseFloat(document.querySelector(`.lc[data-i="${i}"]`).value)||0}));
+  if(!(X>0))return m("#kmsg","X doit être supérieur à 0.");
+  if(!(ex>=0&&ex<=2))return m("#kmsg","L’expiration doit être comprise entre 0 et 2 mois.");
+  if(!probsValid(lots))return m("#kmsg","La somme des probabilités fait "+pct(sumP(lots))+" : elle doit faire exactement 100 %.");
+  S.X=X;S.exp=ex;S.lots=lots;log("Configuration modifiée");m("#kmsg","Configuration enregistrée.",1)}}
+/* ---------- Simulation de campagne ---------- */
+function bars(lab,val,col){const mx=Math.max(1,...val),w=460/lab.length;
+ return `<svg viewBox="0 0 460 230" width="100%" role="img" aria-label="Graphique">${val.map((v,i)=>{const h=v/mx*150;return `<rect x="${i*w+10}" y="${180-h}" width="${w-20}" height="${h}" fill="${col}" rx="4"/><text x="${i*w+w/2}" y="${172-h}" text-anchor="middle" font-size="16" font-weight="700">${v}</text><text x="${i*w+w/2}" y="205" text-anchor="middle" font-size="14">${lab[i]}</text>`}).join("")}</svg>`}
+function vSim(){return `<section class="card"><h2>Simulation de campagne (3 mois)</h2><div class="row"><label for="sn">Nombre de clients</label><input id="sn" type="number" min="1" max="2000" value="20" style="width:110px"><button id="sg">Lancer la simulation</button></div><div class="msg err" id="smsg"></div><div id="sres"></div></section>`}
+function bindSim(){$("#sg").onclick=()=>{const N=parseInt($("#sn").value,10);
+ if(!(N>=1&&N<=2000))return $("#smsg").textContent="Saisissez un nombre de clients entre 1 et 2000.";
+ if(!probsValid(S.lots))return $("#smsg").textContent="Probabilités invalides : corrigez la configuration.";
+ $("#smsg").textContent="";const R=simulate(S,N);log(`Simulation de campagne : ${N} clients`);
+ $("#sres").innerHTML=`<div class="grid"><div class="card"><h2>Bilan</h2><div class="kv"><span>Chiffre d’affaires total</span><b>${eur(R.ca)}</b><span>Tours distribués</span><b>${R.tours}</b><span>Coût estimé des lots</span><b>${eur(R.cost)}</b><span>Ratio coût / chiffre d’affaires</span><b>${R.ca?pct(R.cost/R.ca*100):"-"}</b></div></div>
+ <div class="card"><h2>Mois par palier</h2>${bars(["Aucun","Palier 1","Palier 2","Palier 3"],R.tiers,"#2A9D8F")}</div>
+ <div class="card"><h2>Lots gagnés par catégorie</h2>${bars(Object.values(CATS),Object.keys(CATS).map(k=>R.cats[k]),"#E9A23B")}</div></div>`}}
+/* ---------- Liaisons communes ---------- */
+function bind(){
+ if(view==="client"){
+  $("#q").oninput=e=>{q=e.target.value;const p=e.target.selectionStart;render();const i=$("#q");i.focus();i.setSelectionRange(p,p)};
+  document.querySelectorAll("[data-sel]").forEach(b=>b.onclick=()=>{ST.sel=+b.dataset.sel;render()});
+  $("#qr").onclick=()=>{const c=ST.clients[Math.floor(Math.random()*ST.clients.length)];ST.sel=c.id;log("QR code scanné : "+c.name);render()};
+  const s=$("#spin");if(s)s.onclick=spin}
+ if(view==="comptoir")bindCounter();
+ if(view==="sim")bindSim()}
+document.querySelectorAll(".nav[data-v]").forEach(b=>b.onclick=()=>show(b.dataset.v));
+$("#kb").onclick=()=>{document.body.classList.add("kiosk");$("#kx").hidden=false;$("#kb").hidden=true;show("client")};
+$("#kx").onclick=()=>{document.body.classList.remove("kiosk");$("#kx").hidden=true;$("#kb").hidden=false;render()};
+seed();render();
+</script></body></html>
